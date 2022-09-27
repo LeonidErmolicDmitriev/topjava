@@ -1,11 +1,11 @@
 package ru.javawebinar.topjava.model;
 
-public class CaloriesExcess {
+public class DailyCaloriesCalculator {
     private int calories = 0;
     private boolean value = false;
     private final int maxCalories;
 
-    public CaloriesExcess(int maxCalories){
+    public DailyCaloriesCalculator(int maxCalories){
         this.maxCalories = maxCalories;
     }
 
