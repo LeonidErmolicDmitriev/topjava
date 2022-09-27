@@ -38,7 +38,4 @@ public class UserMealWithExcess {
                 ", excess=" + ((calculator==null)?excess:calculator.getValue()) +
                 '}';
     }
-    public LocalDateTime getDateTime(){
-        return dateTime;
-    }
 }
