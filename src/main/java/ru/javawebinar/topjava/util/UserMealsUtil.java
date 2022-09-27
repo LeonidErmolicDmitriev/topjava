@@ -57,8 +57,9 @@ public class UserMealsUtil {
     public static List<UserMealWithExcess> filteredByCyclesOptional(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, DailyCaloriesCalculator> caloriesPerDayCalc = new HashMap<>();
         List<UserMealWithExcess> result = new ArrayList<>();
-        meals.forEach(meal -> selectMealByTimeWithCaloriesCalculation(startTime, endTime, caloriesPerDay,
-                caloriesPerDayCalc, result, meal));
+        meals.forEach(
+                meal -> selectMealByTimeWithCaloriesCalculation(startTime, endTime, caloriesPerDay,
+                        caloriesPerDayCalc, result, meal));
         return result;
     }
 
@@ -112,8 +113,7 @@ public class UserMealsUtil {
                     }
 
                     public Set<Collector.Characteristics> characteristics() {
-                        return Collections.unmodifiableSet(
-                                EnumSet.of(Characteristics.UNORDERED, Collector.Characteristics.IDENTITY_FINISH));
+                        return EnumSet.of(Characteristics.UNORDERED);
                     }
 
                 });
