@@ -2,11 +2,16 @@ package ru.javawebinar.topjava.model;
 
 public class DailyCaloriesCalculator {
     private int calories = 0;
-    private boolean value = false;
+    private boolean excess = false;
     private final int maxCalories;
 
     public DailyCaloriesCalculator(int maxCalories){
         this.maxCalories = maxCalories;
+    }
+
+    public DailyCaloriesCalculator(boolean excess){
+        this.excess = excess;
+        this.maxCalories = -1;
     }
 
     public void updateData(int calories){
@@ -19,10 +24,13 @@ public class DailyCaloriesCalculator {
     }
 
     private void updateValue() {
-        this.value = (calories>maxCalories);
+        if (this.maxCalories<0){
+            return;
+        }
+        this.excess = (calories>maxCalories);
     }
 
-    public boolean getValue() {
-        return value;
+    public boolean isExcess() {
+        return excess;
     }
 }
