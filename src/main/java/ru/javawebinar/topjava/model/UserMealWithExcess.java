@@ -8,6 +8,7 @@ public class UserMealWithExcess {
     private final String description;
 
     private final int calories;
+
     private final DailyCaloriesCalculator calculator;
 
     public UserMealWithExcess(LocalDateTime dateTime, String description, int calories, boolean excess) {

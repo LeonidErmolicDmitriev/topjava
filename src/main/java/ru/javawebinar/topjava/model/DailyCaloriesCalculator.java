@@ -5,16 +5,16 @@ public class DailyCaloriesCalculator {
     private boolean excess = false;
     private final int maxCalories;
 
-    public DailyCaloriesCalculator(int maxCalories){
+    public DailyCaloriesCalculator(int maxCalories) {
         this.maxCalories = maxCalories;
     }
 
-    public DailyCaloriesCalculator(boolean excess){
+    public DailyCaloriesCalculator(boolean excess) {
         this.excess = excess;
         this.maxCalories = -1;
     }
 
-    public void updateData(int calories){
+    public void updateData(int calories) {
         addCalories(calories);
         updateValue();
     }
@@ -24,10 +24,9 @@ public class DailyCaloriesCalculator {
     }
 
     private void updateValue() {
-        if (this.maxCalories<0){
-            return;
+        if (this.maxCalories >= 0) {
+            this.excess = (calories > maxCalories);
         }
-        this.excess = (calories>maxCalories);
     }
 
     public boolean isExcess() {
