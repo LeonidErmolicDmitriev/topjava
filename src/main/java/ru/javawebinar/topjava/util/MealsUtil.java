@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MealsUtil {
 
@@ -34,19 +35,31 @@ public class MealsUtil {
         mealsTo.forEach(System.out::println);
     }
 
+    public static List<MealTo> allByStreams(List<Meal> meals, int caloriesPerDay) {
+        return filteredByStreams(meals, null, null, caloriesPerDay);
+    }
+
     public static List<MealTo> filteredByStreams(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
                 .collect(
                         Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
                 );
-
-        return meals.stream()
-                .filter(meal -> startTime == null && endTime == null || TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime))
+        return getMap(meals, startTime != null && endTime != null, startTime, endTime)
                 .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
     }
 
+    private static Stream<Meal> getMap(List<Meal> meals, boolean filter, LocalTime startTime, LocalTime endTime) {
+        if (filter) {
+            return meals.stream()
+                    .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime));
+        } else {
+            return meals.stream();
+        }
+    }
+
     private static MealTo createTo(Meal meal, boolean excess) {
-        return new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
+        int id = (meal.getId() == null) ? 0 : meal.getId();
+        return new MealTo(id, meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
 }

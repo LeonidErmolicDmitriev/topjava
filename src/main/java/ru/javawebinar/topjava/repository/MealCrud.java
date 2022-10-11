@@ -5,13 +5,13 @@ import ru.javawebinar.topjava.model.Meal;
 import java.util.List;
 
 public interface MealCrud {
-    void create(Meal meal);
+    Meal create(Meal meal);
 
     List<Meal> getAll();
 
     Meal read(int id);
 
-    void update(Meal meal);
+    Meal update(Meal meal);
 
     void delete(int id);
 }

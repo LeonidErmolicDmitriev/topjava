@@ -8,16 +8,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MealCrudMemory implements MealCrud {
+public class MemoryMealCrud implements MealCrud {
 
     private final Map<Integer, Meal> meals = new ConcurrentHashMap<>();
 
     private final AtomicInteger id = new AtomicInteger(0);
 
     @Override
-    public void create(Meal meal) {
+    public Meal create(Meal meal) {
         meal.setId(id.getAndIncrement());
-        update(meal);
+        return meals.put(meal.getId(), meal);
     }
 
     @Override
@@ -31,8 +31,8 @@ public class MealCrudMemory implements MealCrud {
     }
 
     @Override
-    public void update(Meal meal) {
-        meals.put(meal.getId(), meal);
+    public Meal update(Meal meal) {
+        return meals.replace(meal.getId(), meal);
     }
 
     @Override

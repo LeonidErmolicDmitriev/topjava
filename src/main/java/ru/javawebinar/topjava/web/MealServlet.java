@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.repository.MealCrud;
-import ru.javawebinar.topjava.repository.MealCrudMemory;
+import ru.javawebinar.topjava.repository.MemoryMealCrud;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -21,7 +21,7 @@ public class MealServlet extends HttpServlet {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    private static final MealCrud mealCrud = new MealCrudMemory();
+    private static final MealCrud mealCrud = new MemoryMealCrud();
 
     static {
         List<Meal> mealsList = MealsUtil.getInitialMeals();
@@ -65,12 +65,12 @@ public class MealServlet extends HttpServlet {
         LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("dateTime"));
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
-        if (Boolean.parseBoolean(request.getParameter("newMeal"))) {
+        if (request.getParameter("id").isEmpty()) {
             log.debug("create meal");
             mealCrud.create(new Meal(dateTime, description, calories));
         } else {
+            Integer id = Integer.parseInt(request.getParameter("id"));
             log.debug("update meal");
-            int id = Integer.parseInt(request.getParameter("id"));
             mealCrud.update(new Meal(id, dateTime, description, calories));
         }
         log.debug("forward to meals");
@@ -78,8 +78,7 @@ public class MealServlet extends HttpServlet {
     }
 
     private void setListRequestAttributes(HttpServletRequest request) {
-        List<MealTo> mealsTo = MealsUtil.filteredByStreams(mealCrud.getAll(), null, null,
-                MealsUtil.CALORIES_PER_DAY);
+        List<MealTo> mealsTo = MealsUtil.allByStreams(mealCrud.getAll(), MealsUtil.CALORIES_PER_DAY);
         request.setAttribute("mealsTo", mealsTo);
         request.setAttribute("formatter", FORMATTER);
     }
@@ -87,7 +86,5 @@ public class MealServlet extends HttpServlet {
     private void setMealRequestAttributes(HttpServletRequest request, Meal meal) {
         request.setAttribute("formatter", FORMATTER);
         request.setAttribute("meal", meal);
-        request.setAttribute("newMeal", meal.getId() == null);
     }
-
 }
