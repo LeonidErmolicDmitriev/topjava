@@ -53,8 +53,8 @@ public class MealsUtil {
         if (startTime == null && endTime == null) {
             return meals.stream();
         } else {
-            LocalTime filterStartTime = (startTime == null) ? LocalTime.of(0, 0) : startTime;
-            LocalTime filterEndTime = (endTime == null) ? LocalTime.of(23, 59, 59, 999) : endTime;
+            LocalTime filterStartTime = (startTime == null) ? LocalTime.MIN : startTime;
+            LocalTime filterEndTime = (endTime == null) ? LocalTime.MAX : endTime;
             return meals.stream()
                     .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getTime(), filterStartTime, filterEndTime));
         }
