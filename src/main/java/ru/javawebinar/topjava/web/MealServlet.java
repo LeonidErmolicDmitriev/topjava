@@ -21,14 +21,7 @@ public class MealServlet extends HttpServlet {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    private static final MealCrud mealCrud = new MemoryMealCrud();
-
-    static {
-        List<Meal> mealsList = MealsUtil.getInitialMeals();
-        for (Meal meal : mealsList) {
-            mealCrud.create(new Meal(meal.getDateTime(), meal.getDescription(), meal.getCalories()));
-        }
-    }
+    private final MealCrud mealCrud = new MemoryMealCrud();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,6 +52,17 @@ public class MealServlet extends HttpServlet {
         }
     }
 
+    private void setListRequestAttributes(HttpServletRequest request) {
+        List<MealTo> mealsTo = MealsUtil.allByStreams(mealCrud.getAll(), MealsUtil.CALORIES_PER_DAY);
+        request.setAttribute("mealsTo", mealsTo);
+        request.setAttribute("formatter", FORMATTER);
+    }
+
+    private void setMealRequestAttributes(HttpServletRequest request, Meal meal) {
+        request.setAttribute("formatter", FORMATTER);
+        request.setAttribute("meal", meal);
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -75,16 +79,5 @@ public class MealServlet extends HttpServlet {
         }
         log.debug("forward to meals");
         response.sendRedirect("meals");
-    }
-
-    private void setListRequestAttributes(HttpServletRequest request) {
-        List<MealTo> mealsTo = MealsUtil.allByStreams(mealCrud.getAll(), MealsUtil.CALORIES_PER_DAY);
-        request.setAttribute("mealsTo", mealsTo);
-        request.setAttribute("formatter", FORMATTER);
-    }
-
-    private void setMealRequestAttributes(HttpServletRequest request, Meal meal) {
-        request.setAttribute("formatter", FORMATTER);
-        request.setAttribute("meal", meal);
     }
 }

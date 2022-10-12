@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,13 @@ public class MemoryMealCrud implements MealCrud {
     private final Map<Integer, Meal> meals = new ConcurrentHashMap<>();
 
     private final AtomicInteger id = new AtomicInteger(0);
+
+    public MemoryMealCrud() {
+        List<Meal> mealsList = MealsUtil.getInitialMeals();
+        for (Meal meal : mealsList) {
+            create(new Meal(meal.getDateTime(), meal.getDescription(), meal.getCalories()));
+        }
+    }
 
     @Override
     public Meal create(Meal meal) {
@@ -32,7 +40,8 @@ public class MemoryMealCrud implements MealCrud {
 
     @Override
     public Meal update(Meal meal) {
-        return meals.replace(meal.getId(), meal);
+        Meal oldMeal = meals.replace(meal.getId(), meal);
+        return (oldMeal == null ? null : meal);
     }
 
     @Override

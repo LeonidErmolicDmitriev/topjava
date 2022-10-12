@@ -25,7 +25,7 @@
     <jsp:useBean id="mealsTo" scope="request" type="java.util.List"/>
     <jsp:useBean id="formatter" scope="request" type="java.time.format.DateTimeFormatter"/>
     <c:forEach items="${mealsTo}" var="mealTo">
-        <tr style=${mealTo.excess?'color:red;':'color:green;'}>
+        <tr style='color:${mealTo.excess?'red;':'green;'}'>
             <td>${mealTo.dateTime.format(formatter)}</td>
             <td>${mealTo.description}</td>
             <td>${mealTo.calories}</td>
