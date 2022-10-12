@@ -50,11 +50,13 @@ public class MealsUtil {
     }
 
     private static Stream<Meal> getStream(List<Meal> meals, LocalTime startTime, LocalTime endTime) {
-        if (startTime != null && endTime != null) {
-            return meals.stream()
-                    .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime));
-        } else {
+        if (startTime == null && endTime == null) {
             return meals.stream();
+        } else {
+            LocalTime filterStartTime = (startTime == null) ? LocalTime.of(0, 0) : startTime;
+            LocalTime filterEndTime = (endTime == null) ? LocalTime.of(23, 59, 59, 999) : endTime;
+            return meals.stream()
+                    .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getTime(), filterStartTime, filterEndTime));
         }
     }
 
