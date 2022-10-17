@@ -1,7 +1,3 @@
-<%--@elvariable id="startDate" type="java.lang.String"--%>
-<%--@elvariable id="endDate" type="java.lang.String"--%>
-<%--@elvariable id="startTime" type="java.lang.String"--%>
-<%--@elvariable id="endTime" type="java.lang.String"--%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -27,16 +23,16 @@
     <h2>Meals</h2>
     <form method="get">
         <label>Start date:
-            <input type="date" name="startDate" value="${startDate}"/>
+            <input type="date" name="startDate" value="${param.startDate}"/>
         </label>
         <label>End date:
-            <input type="date" name="endDate" value="${endDate}"/>
+            <input type="date" name="endDate" value="${param.endDate}"/>
         </label>
         <label>Start time:
-            <input type="time" name="startTime" value="${startTime}"/>
+            <input type="time" name="startTime" value="${param.startTime}"/>
         </label>
         <label>End time:
-            <input type="time" name="endTime" value="${endTime}"/>
+            <input type="time" name="endTime" value="${param.endTime}"/>
         </label>
         <button type="submit" name="action" value="filter">Filter</button>
     </form>

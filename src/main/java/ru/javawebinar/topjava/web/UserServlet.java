@@ -23,9 +23,7 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String userId = request.getParameter("userId");
-        if (!userId.isEmpty()) {
-            SecurityUtil.setAuthUserId(Integer.parseInt(userId));
-        }
+        SecurityUtil.setAuthUserId(Integer.parseInt(userId));
         response.sendRedirect("meals");
     }
 }

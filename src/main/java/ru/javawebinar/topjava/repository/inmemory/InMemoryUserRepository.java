@@ -60,7 +60,7 @@ public class InMemoryUserRepository implements UserRepository {
         Optional<User> optionalUser = repository
                 .values()
                 .stream()
-                .filter(user -> user.getEmail().equals(email))
+                .filter(user -> user.getEmail().toLowerCase().equals(email.toLowerCase()))
                 .findFirst();
         return optionalUser.orElse(null);
     }
