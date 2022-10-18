@@ -7,6 +7,8 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +23,18 @@ public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.getInitialMeals().forEach(meal -> save(meal, 1));
-        MealsUtil.getInitialMeals().forEach(meal -> save(meal, 2));
+        List<Meal> meals = MealsUtil.getInitialMeals();
+        meals.forEach(meal -> save(meal, 1));
+        meals = Arrays.asList(
+                new Meal(LocalDateTime.of(2021, Month.JANUARY, 30, 11, 0), "Завтрак чемпиона", 750),
+                new Meal(LocalDateTime.of(2021, Month.JANUARY, 30, 12, 0), "Обед чемпиона", 1200),
+                new Meal(LocalDateTime.of(2021, Month.JANUARY, 30, 21, 0), "Легкий ужин", 200),
+                new Meal(LocalDateTime.of(2021, Month.JANUARY, 31, 0, 0), "Ночной перекус на бульваре роз", 100),
+                new Meal(LocalDateTime.of(2021, Month.JANUARY, 31, 11, 0), "Завтрак чемпиона", 1200),
+                new Meal(LocalDateTime.of(2021, Month.JANUARY, 31, 12, 0), "Обед чемпиона", 750),
+                new Meal(LocalDateTime.of(2021, Month.JANUARY, 31, 21, 0), "Ужин чемпиона", 250)
+        );
+        meals.forEach(meal -> save(meal, 2));
     }
 
     @Override
