@@ -21,31 +21,28 @@ public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.meals.forEach(meal -> save(meal, meal.getUserId()));
+        MealsUtil.meals.forEach(meal -> save(meal, (counter.get() + 1) % 2 == 0 ? 2 : 1));
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            repository.computeIfAbsent(userId, meals -> new ConcurrentHashMap<>()).put(meal.getId(), meal);
+            getUserRepository(userId).put(meal.getId(), meal);
             return meal;
         }
         // handle case: update, but not present in storage
-        return repository.get(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> {
-            meal.setUserId(userId);
-            return meal;
-        });
+        return getUserRepository(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        return (repository.get(userId).remove(id) != null);
+        return (getUserRepository(userId).remove(id) != null);
     }
 
     @Override
     public Meal get(int id, int userId) {
-        return repository.get(userId).get(id);
+        return getUserRepository(userId).get(id);
     }
 
     @Override
@@ -59,13 +56,16 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     private List<Meal> filteredByPredicate(Predicate<Meal> filter, int userId) {
-        return repository
-                .get(userId)
+        return getUserRepository(userId)
                 .values()
                 .stream()
                 .filter(filter)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
+    }
+
+    private Map<Integer, Meal> getUserRepository(int userId) {
+        return repository.computeIfAbsent(userId, meals -> new ConcurrentHashMap<>());
     }
 }
 
