@@ -13,8 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
-    public static final int USER_ID = START_SEQ;
-    public static final int ADMIN_ID = START_SEQ + 1;
     public static final int MEAL_ID = START_SEQ + 17;
     public static final int USER_MEAL_ID = START_SEQ + 3;
     public static final int ADMIN_MEAL_ID = START_SEQ + 12;
@@ -33,30 +31,30 @@ public class MealTestData {
             "Ужин", 410);
 
     public static final List<Meal> adminMeals31 = Arrays.asList(
-            adminMeal31_1,
-            adminMeal31_2,
+            adminMeal31_4,
             adminMeal31_3,
-            adminMeal31_4
+            adminMeal31_2,
+            adminMeal31_1
     );
     public static final List<Meal> adminMeals = Arrays.asList(
-            new Meal(START_SEQ + 10, LocalDateTime.of(2021, Month.JANUARY, 30, 11, 0), "Завтрак", 500),
-            new Meal(START_SEQ + 11, LocalDateTime.of(2021, Month.JANUARY, 30, 13, 0), "Обед", 1000),
-            adminMeal,
-            adminMeal31_1,
-            adminMeal31_2,
+            adminMeal31_4,
             adminMeal31_3,
-            adminMeal31_4
+            adminMeal31_2,
+            adminMeal31_1,
+            adminMeal,
+            new Meal(START_SEQ + 11, LocalDateTime.of(2021, Month.JANUARY, 30, 13, 0), "Обед", 1000),
+            new Meal(START_SEQ + 10, LocalDateTime.of(2021, Month.JANUARY, 30, 11, 0), "Завтрак", 500)
     );
 
     public static Meal getNew() {
-        return new Meal(null, LocalDateTime.of(LocalDate.now(), LocalTime.MIN), "Test", 1555);
+        return new Meal(null, LocalDateTime.of(LocalDate.of(2022, Month.SEPTEMBER, 30), LocalTime.MIN), "Test", 1555);
     }
 
     public static Meal getUpdated() {
         Meal updated = new Meal(userMeal);
         updated.setDescription("t_e_s_t");
         updated.setCalories(51);
-        updated.setDateTime(LocalDateTime.of(LocalDate.now().minusDays(2), LocalTime.MIN));
+        updated.setDateTime(LocalDateTime.of(LocalDate.of(2022, Month.SEPTEMBER, 1), LocalTime.MIN));
         return updated;
     }
 
