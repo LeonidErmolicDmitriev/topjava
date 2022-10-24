@@ -24,6 +24,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 import static ru.javawebinar.topjava.MealTestData.assertMatch;
 
 @ContextConfiguration({
+        "classpath:spring/spring-app-jdbc.xml",
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
