@@ -36,8 +36,6 @@ public class MealServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
     private static final StringBuffer fullLog = new StringBuffer();
-    @Autowired
-    private MealService service;
 
     @AfterClass
     public static void afterClass() {
@@ -48,9 +46,16 @@ public class MealServiceTest {
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            logInfo(description, nanos);
+            String testName = description.getMethodName();
+            String currentLogString = String.format("%30s - %d ms.",
+                    testName, TimeUnit.NANOSECONDS.toMillis(nanos));
+            log.info(currentLogString);
+            fullLog.append(currentLogString).append('\n');
         }
     };
+
+    @Autowired
+    private MealService service;
 
     @Test
     public void delete() {
@@ -129,13 +134,5 @@ public class MealServiceTest {
     @Test
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
-    }
-
-    private static void logInfo(Description description, long nanos) {
-        String testName = description.getMethodName();
-        String currentLogString = String.format("%30s - %d",
-                testName, TimeUnit.NANOSECONDS.toMillis(nanos));
-        log.info(currentLogString);
-        fullLog.append(currentLogString).append('\n');
     }
 }
