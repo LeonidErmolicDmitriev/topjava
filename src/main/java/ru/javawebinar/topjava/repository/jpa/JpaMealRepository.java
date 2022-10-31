@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.repository.jpa;
 
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
@@ -48,23 +47,23 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        List<Meal> meals = em.createNamedQuery(Meal.GET)
-                .setParameter("id", id)
-                .setParameter("user_id", userId)
-                .getResultList();
-        return DataAccessUtils.singleResult(meals);
+        Meal meal = em.find(Meal.class, id);
+        if (meal != null && meal.getUser().id() != userId) {
+            return null;
+        }
+        return meal;
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return em.createNamedQuery(Meal.ALL_SORTED)
+        return em.createNamedQuery(Meal.ALL_SORTED, Meal.class)
                 .setParameter("user_id", userId)
                 .getResultList();
     }
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return em.createNamedQuery(Meal.BETWEEN_HALF_OPEN)
+        return em.createNamedQuery(Meal.BETWEEN_HALF_OPEN, Meal.class)
                 .setParameter("user_id", userId)
                 .setParameter("start_date", startDateTime)
                 .setParameter("end_date", endDateTime)

@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.model;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -18,27 +19,30 @@ import java.time.LocalTime;
                 "m.dateTime>=:start_date AND m.dateTime<:end_date ORDER BY m.dateTime DESC")
 })
 @Entity
-@Table(name = "meals", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "date_time"}, name = "user_date_time"))
+@Table(name = "meals", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "date_time"},
+        name = "meals_user_id_date_time_uniq_index"))
 public class Meal extends AbstractBaseEntity {
     public static final String DELETE = "Meal.delete";
     public static final String GET = "Meal.get";
     public static final String ALL_SORTED = "Meal.getAllSorted";
     public static final String BETWEEN_HALF_OPEN = "Meal.getBetweenHalfOpen";
 
-    @Column(name = "date_time", nullable = false, unique = true)
+    @Column(name = "date_time", nullable = false)
     @NotNull
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
     @Size(max = 128)
+    @NotBlank
     private String description;
 
-    @Column(name = "calories", nullable = false, columnDefinition = "int default 10")
+    @Column(name = "calories", nullable = false)
     @Range(min = 10, max = 10000)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
+    @NotNull
     private User user;
 
     public Meal() {

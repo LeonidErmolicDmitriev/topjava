@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.AfterClass;
-import org.junit.AssumptionViolatedException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Stopwatch;
@@ -35,19 +34,10 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+    private static final StringBuffer fullLog = new StringBuffer();
     @Autowired
     private MealService service;
-
-    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
-    private static String fullLog = "";
-
-    private static void logInfo(Description description, String status, long nanos) {
-        String testName = description.getMethodName();
-        String currentLogString = String.format("Test %s %s, spent %d microseconds",
-                testName, status, TimeUnit.NANOSECONDS.toMicros(nanos));
-        log.info(currentLogString);
-        fullLog += currentLogString + '\n';
-    }
 
     @AfterClass
     public static void afterClass() {
@@ -57,20 +47,9 @@ public class MealServiceTest {
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
-        protected void succeeded(long nanos, Description description) {
-            logInfo(description, "succeeded", nanos);
+        protected void finished(long nanos, Description description) {
+            logInfo(description, nanos);
         }
-
-        @Override
-        protected void failed(long nanos, Throwable e, Description description) {
-            logInfo(description, "failed", nanos);
-        }
-
-        @Override
-        protected void skipped(long nanos, AssumptionViolatedException e, Description description) {
-            logInfo(description, "skipped", nanos);
-        }
-
     };
 
     @Test
@@ -150,5 +129,13 @@ public class MealServiceTest {
     @Test
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
+    }
+
+    private static void logInfo(Description description, long nanos) {
+        String testName = description.getMethodName();
+        String currentLogString = String.format("%30s - %d",
+                testName, TimeUnit.NANOSECONDS.toMillis(nanos));
+        log.info(currentLogString);
+        fullLog.append(currentLogString).append('\n');
     }
 }
