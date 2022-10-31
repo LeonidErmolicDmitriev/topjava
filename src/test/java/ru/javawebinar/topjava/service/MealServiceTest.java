@@ -42,7 +42,7 @@ public class MealServiceTest {
         @Override
         protected void finished(long nanos, Description description) {
             String testName = description.getMethodName();
-            String currentLogString = String.format("%30s - %d ms.",
+            String currentLogString = String.format("%30s - %d ms",
                     testName, TimeUnit.NANOSECONDS.toMillis(nanos));
             log.info(currentLogString);
             fullLog.append(currentLogString).append('\n');
