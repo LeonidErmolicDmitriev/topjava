@@ -35,12 +35,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public class MealServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
-    private static final StringBuffer fullLog = new StringBuffer();
-
-    @AfterClass
-    public static void afterClass() {
-        log.info("Test finished:\n" + fullLog);
-    }
+    private static final StringBuilder fullLog = new StringBuilder();
 
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
@@ -134,5 +129,10 @@ public class MealServiceTest {
     @Test
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        log.info("Test finished:\n" + fullLog);
     }
 }
