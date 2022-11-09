@@ -18,7 +18,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
 public abstract class JdbcMealRepository<T> implements MealRepository {
 
     private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
@@ -45,7 +44,7 @@ public abstract class JdbcMealRepository<T> implements MealRepository {
                 .addValue("id", meal.getId())
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories())
-                .addValue("date_time", converDateTime(meal.getDateTime()))
+                .addValue("date_time", convertDateTime(meal.getDateTime()))
                 .addValue("user_id", userId);
 
         if (meal.isNew()) {
@@ -81,37 +80,36 @@ public abstract class JdbcMealRepository<T> implements MealRepository {
     }
 
     @Override
-    @Profile(value = Profiles.POSTGRES_DB)
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return jdbcTemplate.query(
                 "SELECT * FROM meals WHERE user_id=?  AND date_time >=  ? AND date_time < ? ORDER BY date_time DESC",
-                ROW_MAPPER, userId, converDateTime(startDateTime), converDateTime(endDateTime));
+                ROW_MAPPER, userId, convertDateTime(startDateTime), convertDateTime(endDateTime));
     }
 
-    abstract T converDateTime(LocalDateTime localDateTime);
+    abstract T convertDateTime(LocalDateTime localDateTime);
 
     @Repository
     @Profile(Profiles.HSQL_DB)
-    public static class TimeStampTimeJdbcMealRepository extends JdbcMealRepository<Timestamp> {
-        public TimeStampTimeJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public static class TimeStampJdbcMealRepository extends JdbcMealRepository<Timestamp> {
+        public TimeStampJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
             super(jdbcTemplate, namedParameterJdbcTemplate);
         }
 
         @Override
-        Timestamp converDateTime(LocalDateTime localDateTime) {
+        Timestamp convertDateTime(LocalDateTime localDateTime) {
             return Timestamp.valueOf(localDateTime);
         }
     }
 
     @Repository
     @Profile(Profiles.POSTGRES_DB)
-    public static class LocalDateTimeTimeJdbcMealRepository extends JdbcMealRepository<LocalDateTime> {
-        public LocalDateTimeTimeJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public static class LocalDateTimeJdbcMealRepository extends JdbcMealRepository<LocalDateTime> {
+        public LocalDateTimeJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
             super(jdbcTemplate, namedParameterJdbcTemplate);
         }
 
         @Override
-        LocalDateTime converDateTime(LocalDateTime localDateTime) {
+        LocalDateTime convertDateTime(LocalDateTime localDateTime) {
             return localDateTime;
         }
     }
