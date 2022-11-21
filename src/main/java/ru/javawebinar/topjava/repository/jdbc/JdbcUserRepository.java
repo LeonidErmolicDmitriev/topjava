@@ -24,7 +24,7 @@ import java.util.Map;
 
 @Repository
 @Transactional(readOnly = true)
-public class JdbcUserRepository implements UserRepository {
+public class JdbcUserRepository extends JdbcRepository implements UserRepository {
 
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
 
@@ -47,6 +47,7 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     @Transactional
     public User save(User user) {
+        validate(user, validator);
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
