@@ -51,7 +51,7 @@ public abstract class AbstractServiceTest {
         });
     }
 
-    public void checkProfileForWithException() throws Exception {
+    public void assumeNotJdbc() throws Exception {
         //Assume.assumeFalse(Arrays.stream(environment.getActiveProfiles()).toList().contains(Profiles.JDBC));
     }
 }
