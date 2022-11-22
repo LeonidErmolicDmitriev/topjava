@@ -13,18 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
+import ru.javawebinar.topjava.util.FieldValidator;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 @Transactional(readOnly = true)
-public class JdbcUserRepository extends JdbcRepository implements UserRepository {
+public class JdbcUserRepository implements UserRepository {
 
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
 
@@ -47,7 +45,7 @@ public class JdbcUserRepository extends JdbcRepository implements UserRepository
     @Override
     @Transactional
     public User save(User user) {
-        validate(user, validator);
+        FieldValidator.validate(user);
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
@@ -62,8 +60,32 @@ public class JdbcUserRepository extends JdbcRepository implements UserRepository
             }
             deleteRoles(user.id());
         }
-        insertRoles(user);
+        if (!user.getRoles().isEmpty()) {
+            insertRoles(user);
+        }
         return user;
+    }
+
+    private void deleteRoles(int id) {
+        jdbcTemplate.update("DELETE FROM user_roles WHERE user_id=?", id);
+    }
+
+    private void insertRoles(User user) {
+        Set<Role> roles = user.getRoles();
+        Role[] userRoles = new Role[roles.size()];
+        roles.toArray(userRoles);
+        this.jdbcTemplate.batchUpdate(
+                "insert into user_roles (user_id, role) values(?,?)",
+                new BatchPreparedStatementSetter() {
+                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+                        ps.setInt(1, user.id());
+                        ps.setString(2, userRoles[i].name());
+                    }
+
+                    public int getBatchSize() {
+                        return user.getRoles().size();
+                    }
+                });
     }
 
     @Override
@@ -111,25 +133,6 @@ public class JdbcUserRepository extends JdbcRepository implements UserRepository
             user.setRoles(userRoles);
         });
         return users;
-    }
-
-    private void deleteRoles(int id) {
-        jdbcTemplate.update("DELETE FROM topjava.public.user_roles WHERE user_id=?", id);
-    }
-
-    private void insertRoles(User user) {
-        this.jdbcTemplate.batchUpdate(
-                "insert into user_roles (user_id, role) values(?,?)",
-                new BatchPreparedStatementSetter() {
-                    public void setValues(PreparedStatement ps, int i) throws SQLException {
-                        ps.setInt(1, user.id());
-                        ps.setString(2, user.getRoles().toArray()[i].toString());
-                    }
-
-                    public int getBatchSize() {
-                        return user.getRoles().size();
-                    }
-                });
     }
 
     private void setRoles(User user) {

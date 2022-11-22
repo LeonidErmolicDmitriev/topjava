@@ -17,7 +17,18 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
 
     User getByEmail(String email);
 
-    @EntityGraph(attributePaths = {"meals", "roles"})
-    @Query("SELECT u FROM User u WHERE u.id=?1")
-    User getWithMeals(int id);
+    @EntityGraph(value = "UserWithMeals", type = EntityGraph.EntityGraphType.LOAD)
+    User getOneWithMealsById(int id);
+
+    @EntityGraph(value = "UserWithRoles", type = EntityGraph.EntityGraphType.LOAD)
+    User getOneWithRolesById(int id);
+
+    default User getWithMeals(int id) {
+        // Load user with items into persistence contex
+        getOneWithMealsById(id);
+        // Load user with roles into persistence context
+        // (There is only one user instance by id within the persistence context)
+        return getOneWithRolesById(id);
+    }
+
 }

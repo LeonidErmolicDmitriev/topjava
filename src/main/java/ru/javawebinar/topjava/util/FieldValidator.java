@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.repository.jdbc;
+package ru.javawebinar.topjava.util;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -6,11 +6,11 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
 
-public class JdbcRepository {
-    protected ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
-    protected Validator validator = vf.getValidator();
+public class FieldValidator {
+    private static final ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
+    private static final Validator validator = vf.getValidator();
 
-    public static void validate(Object object, Validator validator) {
+    public static void validate(Object object) {
         Set<ConstraintViolation<Object>> constraintViolations = validator
                 .validate(object);
         StringBuilder errors = new StringBuilder();

@@ -27,6 +27,22 @@ import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 })
 @Entity
 @Table(name = "users")
+@NamedEntityGraphs(
+        {
+                @NamedEntityGraph(
+                        name = "UserWithMeals",
+                        attributeNodes = {
+                                @NamedAttributeNode("meals")
+                        }
+                ),
+                @NamedEntityGraph(
+                        name = "UserWithRoles",
+                        attributeNodes = {
+                                @NamedAttributeNode("roles")
+                        }
+                ),
+        }
+)
 public class User extends AbstractNamedEntity {
 
     public static final String DELETE = "User.delete";

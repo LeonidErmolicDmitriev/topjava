@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Assume;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
@@ -14,10 +13,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.ActiveDbProfileResolver;
-import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.TimingRules;
-
-import java.util.Arrays;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.util.ValidationUtil.getRootCause;
@@ -42,7 +38,6 @@ public abstract class AbstractServiceTest {
 
     //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
     protected <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {
-        Assume.assumeFalse(Arrays.stream(environment.getActiveProfiles()).toList().contains(Profiles.JDBC));
         assertThrows(rootExceptionClass, () -> {
             try {
                 runnable.run();
