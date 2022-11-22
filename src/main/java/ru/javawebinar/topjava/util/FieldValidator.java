@@ -1,9 +1,6 @@
 package ru.javawebinar.topjava.util;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.*;
 import java.util.Set;
 
 public class FieldValidator {
@@ -11,17 +8,9 @@ public class FieldValidator {
     private static final Validator validator = vf.getValidator();
 
     public static void validate(Object object) {
-        Set<ConstraintViolation<Object>> constraintViolations = validator
-                .validate(object);
-        StringBuilder errors = new StringBuilder();
-        for (ConstraintViolation<Object> cv : constraintViolations) {
-            errors.append(String.format(
-                    "Внимание, ошибка! property: [%s], value: [%s], message: [%s]",
-                    cv.getPropertyPath(), cv.getInvalidValue(), cv.getMessage()));
-            errors.append("\n");
-        }
-        if (!errors.isEmpty()) {
-            throw new IllegalArgumentException(errors.toString());
+        Set<ConstraintViolation<Object>> constraintViolations = validator.validate(object);
+        if (!constraintViolations.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolations);
         }
     }
 }
