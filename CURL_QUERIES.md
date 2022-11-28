@@ -1,17 +1,15 @@
-curl http://localhost:8080/topjava/rest/meals
+"Get meals": curl http://localhost:8080/topjava/rest/meals
 
-curl http://localhost:8080/topjava/rest/meals/100009
+"Get meal with id": curl http://localhost:8080/topjava/rest/meals/100009
 
-curl http://localhost:8080/topjava/rest/meals/by_dates_and_time
+"Get meals filtered by date and time": curl http://localhost:8080/topjava/rest/meals/filtered?startDate=2020-01-30
+&startTime=10:15&endDate=2020-01-30&endTime=22:15
 
-curl http://localhost:8080/topjava/rest/meals/by_dates_and_time?startDate=2020-01-30&startTime=10:15&endDate=2020-01-30&endTime=22:15
+"Create new meal": curl http://localhost:8080/topjava/rest/meals -H "Content-Type: application/json;charset=utf-8"
+-d "{\"dateTime\":\"2020-01-30T10:02:00\",\"description\":\"test\",\"calories\":200}"
 
-curl -Method PUT -H @{"Accept"= "application/json"; "content-type"= "application/json"} -Body '{"id":100003,"dateTime":"
-2020-01-30T10:02:00","description":"Обновленный завтрак","calories":200}'
--uri "http://localhost:8080/topjava/rest/meals/100003"
+"Update existing meal": curl -X PUT -H "Content-Type: application/json"
+-d "{\"dateTime\":\"2022-01-30T10:02:00\",\"description\":\"updated\",\"calories\":200}"
+http://localhost:8080/topjava/rest/meals/100005
 
-curl -Method POST -H @{"Accept"= "application/json"; "content-type"= "application/json"} -Body '{"dateTime":"
-2020-01-30T10:02:00","description":"Обновленный завтрак","calories":200}'
--uri "http://localhost:8080/topjava/rest/meals"
-
-curl -Method DELETE -uri "http://localhost:8080/topjava/rest/meals/100003"
+"Delete meal": curl -X DELETE http://localhost:8080/topjava/rest/meals/100004
