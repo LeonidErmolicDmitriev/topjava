@@ -82,20 +82,28 @@ public class MealTo {
 
         MealTo mealTo = (MealTo) o;
 
-        if (calories != mealTo.calories) return false;
-        if (excess != mealTo.excess) return false;
-        if (!id.equals(mealTo.id)) return false;
-        if (!dateTime.equals(mealTo.dateTime)) return false;
-        return description.equals(mealTo.description);
+        return (calories == mealTo.calories && excess == mealTo.excess && equals(mealTo.id, id)
+                && equals(mealTo.dateTime, dateTime) && equals(mealTo.description, description));
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + dateTime.hashCode();
-        result = 31 * result + description.hashCode();
+        int result = hashCode(id);
+        result = 31 * result + hashCode(dateTime);
+        result = 31 * result + hashCode(description);
         result = 31 * result + calories;
         result = 31 * result + (excess ? 1 : 0);
         return result;
+    }
+
+    private boolean equals(Object control, Object test) {
+        if (null == control) {
+            return null == test;
+        }
+        return control.equals(test);
+    }
+
+    private int hashCode(Object control) {
+        return (control == null) ? 0 : control.hashCode();
     }
 }

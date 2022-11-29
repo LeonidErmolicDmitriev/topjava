@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web.user;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -48,12 +49,12 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getWithMeals() throws Exception {
-        if (isDataJpaBased()) {
-            perform(MockMvcRequestBuilders.get(REST_URL + "/with-meals"))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                    .andExpect(USER_MATCHER.contentJson(user));
-        }
+        Assumptions.assumeTrue(isDataJpaBased(), "Method not supported (DataJPA only!)");
+        perform(MockMvcRequestBuilders.get(REST_URL + "/with-meals"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHER.contentJson(user));
+
     }
 }

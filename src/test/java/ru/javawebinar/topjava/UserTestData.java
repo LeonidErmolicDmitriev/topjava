@@ -1,18 +1,16 @@
 package ru.javawebinar.topjava;
 
-import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class UserTestData {
     public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class, "registered", "meals");
-    public static final MatcherFactory.Matcher<User> USER_WITH_MEALS_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class, "registered", "meals.user.registered");
+    public static final MatcherFactory.Matcher<User> USER_WITH_MEALS_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class, "registered", "meals.user");
 
     public static final int USER_ID = START_SEQ;
     public static final int ADMIN_ID = START_SEQ + 1;
@@ -30,9 +28,7 @@ public class UserTestData {
 
     public static User getWithMeals() {
         User withMeals = new User(user);
-        List<Meal> meals = MealTestData.meals;
-        meals.forEach(meal -> meal.setUser(withMeals));
-        withMeals.setMeals(meals);
+        withMeals.setMeals(MealTestData.meals);
         return withMeals;
     }
 

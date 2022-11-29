@@ -7,6 +7,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
+import org.junit.jupiter.api.Assumptions;
 import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
@@ -45,13 +46,13 @@ class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getWithMeals() throws Exception {
-        if (isDataJpaBased()) {
-            perform(MockMvcRequestBuilders.get(REST_URL + USER_ID + "/with-meals"))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                    .andExpect(USER_WITH_MEALS_MATCHER.contentJson(UserTestData.getWithMeals()));
-        }
+        Assumptions.assumeTrue(isDataJpaBased(), "Method not supported (DataJPA only!)");
+        perform(MockMvcRequestBuilders.get(REST_URL + USER_ID + "/with-meals"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_WITH_MEALS_MATCHER.contentJson(UserTestData.getWithMeals()));
+
     }
 
     @Test

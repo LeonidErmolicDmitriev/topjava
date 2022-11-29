@@ -54,7 +54,7 @@ public abstract class AbstractControllerTest {
         return mockMvc.perform(builder);
     }
 
-    public boolean isDataJpaBased() {
+    protected boolean isDataJpaBased() {
         return env.acceptsProfiles(org.springframework.core.env.Profiles.of(Profiles.DATAJPA));
     }
 }
