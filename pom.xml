@@ -160,6 +160,12 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version>${spring.security.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-web</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -225,11 +231,6 @@
             <version>${tomcat.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>4.0.1</version>
-        </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -258,7 +259,7 @@
                     <artifactId>jquery</artifactId>
                 </exclusion>
                 <exclusion>
-<!--                https://getbootstrap.com/docs/4.5/components/popovers         -->
+                    <!--                https://getbootstrap.com/docs/4.5/components/popovers         -->
                     <groupId>org.webjars</groupId>
                     <artifactId>popper.js</artifactId>
                 </exclusion>
