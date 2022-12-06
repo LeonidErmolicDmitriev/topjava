@@ -32,11 +32,11 @@
                 <dt><spring:message code="meal.endTime"/>:</dt>
                 <dd><input class="form-control" type="time" name="endTime" id="endTime" value="${param.endTime}"></dd>
             </dl>
-            <button class="btn btn-primary" onclick="ctx.filterTable()">
+            <button class="btn btn-primary" type="button" onclick="ctx.updateTable()">
                 <span class="fa fa-binoculars"></span>
                 <spring:message code="meal.filter"/>
             </button>
-            <button class="btn btn-danger" onclick="ctx.clearFilter()">
+            <button class="btn btn-danger" type="reset" onclick="ctx.clearFilter()">
                 <span class="fa fa-refresh"></span>
                 <spring:message code="common.cancel"/>
             </button>

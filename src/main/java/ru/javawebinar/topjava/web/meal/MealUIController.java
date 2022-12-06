@@ -38,6 +38,7 @@ public class MealUIController extends AbstractMealController {
         super.create(new Meal(null, dateTime, description, calories));
     }
 
+    @Override
     @GetMapping("/filter")
     public List<MealTo> getBetween(
             @RequestParam @Nullable LocalDate startDate,

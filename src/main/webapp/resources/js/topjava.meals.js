@@ -3,18 +3,18 @@ const mealAjaxUrl = "ui/meals/";
 // https://stackoverflow.com/a/5064235/548473
 const ctx = {
     ajaxUrl: mealAjaxUrl,
-    filterTable: function () {
+    updateTable: function () {
         $.ajax({
             type: "GET",
             url: mealAjaxUrl + "filter",
             data: $("#filter").serialize()
         }).done(function (data) {
-            ctx.datatableApi.clear().rows.add(data).draw();
+            updateTableByData(data);
         });
     },
     clearFilter: function () {
         $("#filter")[0].reset();
-        updateTable();
+        ctx.updateTable();
     }
 }
 // $(document).ready(function () {
