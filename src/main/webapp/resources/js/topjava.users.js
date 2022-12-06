@@ -8,8 +8,16 @@ const ctx = {
             updateTableByData(data);
         });
     },
-    enableUser: function (){
-
+    enableUser: function (checkbox){
+        let id = checkbox.closest('tr').attr("id");
+        let enabled = checkbox.is(':checked');
+        $.ajax({
+            type: "POST",
+            url: userAjaxUrl + id,
+            data: "enabled=" + enabled
+        }).done(function () {
+            checkbox.closest('tr').attr("data-user-enabled", enabled);
+        });
     }
 };
 
