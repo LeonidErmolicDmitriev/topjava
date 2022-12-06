@@ -16,21 +16,21 @@
         <form id="filter">
             <dl>
                 <dt><spring:message code="meal.startDate"/>:</dt>
-                <dd><input class="form-control" type="date" name="startDate" id="startDate" value="${param.startDate}">
+                <dd><input class="form-control" type="date" name="startDate" id="startDate">
                 </dd>
             </dl>
             <dl>
                 <dt><spring:message code="meal.endDate"/>:</dt>
-                <dd><input class="form-control" type="date" name="endDate" id="endDate" value="${param.endDate}"></dd>
+                <dd><input class="form-control" type="date" name="endDate" id="endDate"></dd>
             </dl>
             <dl>
                 <dt><spring:message code="meal.startTime"/>:</dt>
-                <dd><input class="form-control" type="time" name="startTime" id="startTime" value="${param.startTime}">
+                <dd><input class="form-control" type="time" name="startTime" id="startTime">
                 </dd>
             </dl>
             <dl>
                 <dt><spring:message code="meal.endTime"/>:</dt>
-                <dd><input class="form-control" type="time" name="endTime" id="endTime" value="${param.endTime}"></dd>
+                <dd><input class="form-control" type="time" name="endTime" id="endTime"></dd>
             </dl>
             <button class="btn btn-primary" type="button" onclick="ctx.updateTable()">
                 <span class="fa fa-binoculars"></span>

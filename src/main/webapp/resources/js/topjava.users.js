@@ -3,12 +3,12 @@ const userAjaxUrl = "admin/users/";
 // https://stackoverflow.com/a/5064235/548473
 const ctx = {
     ajaxUrl: userAjaxUrl,
-    updateTable: function (){
+    updateTable: function () {
         $.get(ctx.ajaxUrl, function (data) {
             updateTableByData(data);
         });
     },
-    enableUser: function (checkbox){
+    enableUser: function (checkbox) {
         let id = checkbox.closest('tr').attr("id");
         let enabled = checkbox.is(':checked');
         $.ajax({
@@ -17,6 +17,10 @@ const ctx = {
             data: "enabled=" + enabled
         }).done(function () {
             checkbox.closest('tr').attr("data-user-enabled", enabled);
+            successNoty("Enabled for user with " + id + " set to " + enabled);
+        }).fail(function (jqXHR) {
+            checkbox.prop("checked", true);
+            failNoty(jqXHR)
         });
     }
 };
