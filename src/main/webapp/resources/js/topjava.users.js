@@ -19,7 +19,7 @@ const ctx = {
             checkbox.closest('tr').attr("data-user-enabled", enabled);
             successNoty("Enabled for user with " + id + " set to " + enabled);
         }).fail(function (jqXHR) {
-            checkbox.prop("checked", true);
+            checkbox.prop("checked", !enabled);
             failNoty(jqXHR)
         });
     }
