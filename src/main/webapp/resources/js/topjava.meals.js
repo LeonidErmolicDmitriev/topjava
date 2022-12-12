@@ -64,4 +64,29 @@ $(function () {
             }
         })
     );
+
+    $('#startDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+
+    $('#endDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+
+    $('#startTime').datetimepicker({
+        timepicker: false,
+        format: 'H:i'
+    });
+
+    $('#endTime').datetimepicker({
+        timepicker: false,
+        format: 'H:i'
+    });
+
+    $('#dateTime').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d H:i'
+    });
 });
