@@ -9,6 +9,9 @@ const ctx = {
             url: mealAjaxUrl + "filter",
             data: $("#filter").serialize()
         }).done(updateTableByData);
+    },
+    formatDate: function (date) {
+        return date.replace("T", " ").substring(0, 16);
     }
 }
 
@@ -31,7 +34,7 @@ $(function () {
                     "data": "dateTime",
                     "render": function (date, type, row) {
                         if (type === "display") {
-                            return date.replace("T", " ");
+                            return ctx.formatDate(date);
                         }
                         return date;
                     }
@@ -65,28 +68,52 @@ $(function () {
         })
     );
 
-    $('#startDate').datetimepicker({
+    let startDate = $('#startDate');
+    let endDate = $('#endDate');
+    startDate.datetimepicker({
         timepicker: false,
-        format: 'Y-m-d'
+        format: 'Y-m-d',
+        onShow: function () {
+            this.setOptions({
+                maxDate: endDate.val() ? endDate.val() : false
+            })
+
+        }
     });
 
-    $('#endDate').datetimepicker({
+    endDate.datetimepicker({
         timepicker: false,
-        format: 'Y-m-d'
+        format: 'Y-m-d',
+        onShow: function () {
+            this.setOptions({
+                minDate: startDate.val() ? startDate.val() : false
+            })
+        }
     });
 
-    $('#startTime').datetimepicker({
-        timepicker: false,
-        format: 'H:i'
+    let startTime = $('#startTime');
+    let endTime = $('#endTime');
+    startTime.datetimepicker({
+        datepicker: false,
+        format: 'H:i',
+        onShow: function () {
+            this.setOptions({
+                maxTime: endTime.val() ? endTime.val() : false
+            })
+        }
     });
 
-    $('#endTime').datetimepicker({
-        timepicker: false,
-        format: 'H:i'
+    endTime.datetimepicker({
+        datepicker: false,
+        format: 'H:i',
+        onShow: function () {
+            this.setOptions({
+                minTime: startTime.val() ? startTime.val() : false
+            })
+        }
     });
 
     $('#dateTime').datetimepicker({
-        timepicker: false,
         format: 'Y-m-d H:i'
     });
 });
