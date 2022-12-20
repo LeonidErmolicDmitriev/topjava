@@ -56,7 +56,7 @@ public class ExceptionInfoHandler {
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
     @ExceptionHandler(BindException.class)
     public ErrorInfo bindingError(HttpServletRequest req, BindException e) {
-        String[] errorDetails = ValidationUtil.getErrorResponse(e.getBindingResult());
+        String[] errorDetails = ValidationUtil.getErrors(e.getBindingResult());
         return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, errorDetails);
     }
 
