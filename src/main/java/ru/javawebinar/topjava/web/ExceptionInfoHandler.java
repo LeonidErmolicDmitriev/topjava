@@ -6,7 +6,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -57,8 +56,8 @@ public class ExceptionInfoHandler {
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
     @ExceptionHandler(BindException.class)
     public ErrorInfo bindingError(HttpServletRequest req, BindException e) {
-        ResponseEntity<String> errorDetails = ValidationUtil.getErrorResponse(e.getBindingResult());
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, errorDetails.getBody());
+        String[] errorDetails = ValidationUtil.getErrorResponse(e.getBindingResult());
+        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, errorDetails);
     }
 
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
@@ -71,6 +70,6 @@ public class ExceptionInfoHandler {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
         return new ErrorInfo(req.getRequestURL(), errorType,
-                errorDetails.length == 0 ? new String[]{rootCause.toString()} : errorDetails);
+                errorDetails.length == 0 ? new String[]{rootCause.getLocalizedMessage()} : errorDetails);
     }
 }
