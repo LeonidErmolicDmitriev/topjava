@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
@@ -55,6 +56,7 @@ public class Meal extends AbstractBaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     @NotNull(groups = View.Persist.class)
+    @ApiModelProperty(hidden = true)
     private User user;
 
     public Meal() {
